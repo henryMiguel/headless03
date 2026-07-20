@@ -383,19 +383,35 @@ function initGravityHeader() {
 
 initGravityHeader();
 
+// --- P5.js Canvas Setup for Interactive Header ---
+
+// 1. Declare flock globally so both setup() and draw() can use it
+let flock;
+
+function setup() {
+  const container = document.getElementById("p5-canvas-container");
+  let canvas = createCanvas(container.clientWidth, container.clientHeight);
+  canvas.parent("p5-canvas-container");
+
+  flock = new Flock();
+
+  // Add an initial set of boids into the system
+  for (let i = 0; i < 100; i++) {
+    let b = new Boid(width / 2, height / 2);
+    flock.addBoid(b);
+  }
+}
+
 function draw() {
-  // clear() makes the canvas transparent so your #2b24ff blue CSS background shows through
+  // clear() makes the canvas transparent so your CSS background shows through
   clear();
 
-  // Example Interaction: Draw white squares wherever the mouse moves
-  // (P5 still tracks mouseX and mouseY even with pointer-events: none!)
-  fill(255, 255, 255, 50); // White with low opacity
-  noStroke();
+  flock.run();
+}
 
-  // Only draw if the mouse is currently hovering inside the header area
-  if (mouseY > 0 && mouseY < height) {
-    rect(mouseX - 25, mouseY - 25, 50, 50);
-  }
+// 3. Move p5 events outside of draw()
+function mouseDragged() {
+  flock.addBoid(new Boid(mouseX, mouseY));
 }
 
 // Automatically resize the canvas if the user resizes their browser window
@@ -404,4 +420,165 @@ function windowResized() {
   if (container) {
     resizeCanvas(container.clientWidth, container.clientHeight);
   }
-}2
+}
+
+// 4. Move Classes outside of draw()
+class Flock {
+  constructor() {
+    this.boids = [];
+  }
+
+  run() {
+    for (let boid of this.boids) {
+      boid.run(this.boids);
+    }
+  }
+
+  addBoid(b) {
+    this.boids.push(b);
+  }
+}
+
+class Boid {
+  constructor(x, y) {
+    this.acceleration = createVector(0, 0);
+    this.velocity = createVector(random(-1, 1), random(-1, 1));
+    this.position = createVector(x, y);
+    this.size = 3.0;
+    this.maxSpeed = 3;
+    this.maxForce = 0.05;
+    colorMode(HSB);
+    let myColors = ["#f1f1f1", "#109648", "#041B15"];
+    this.color = color(random(myColors));
+  }
+
+  run(boids) {
+    this.flock(boids);
+    this.update();
+    this.borders();
+    this.render();
+  }
+
+  applyForce(force) {
+    this.acceleration.add(force);
+  }
+
+  flock(boids) {
+    let separation = this.separate(boids);
+    let alignment = this.align(boids);
+    let cohesion = this.cohesion(boids);
+
+    separation.mult(1.5);
+    alignment.mult(1.0);
+    cohesion.mult(1.0);
+
+    this.applyForce(separation);
+    this.applyForce(alignment);
+    this.applyForce(cohesion);
+  }
+
+  update() {
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(this.maxSpeed);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0);
+  }
+
+  seek(target) {
+    let desired = p5.Vector.sub(target, this.position);
+    desired.normalize();
+    desired.mult(this.maxSpeed);
+    let steer = p5.Vector.sub(desired, this.velocity);
+    steer.limit(this.maxForce);
+    return steer;
+  }
+
+  render() {
+    let theta = this.velocity.heading() + radians(90);
+    fill(this.color);
+    // stroke(255);
+    noStroke();
+    push();
+    translate(this.position.x, this.position.y);
+    rotate(theta);
+    beginShape();
+    vertex(0, -this.size * 2);
+    vertex(-this.size, this.size * 2);
+    vertex(this.size, this.size * 2);
+    endShape(CLOSE);
+    pop();
+  }
+
+  borders() {
+    if (this.position.x < -this.size) this.position.x = width + this.size;
+    if (this.position.y < -this.size) this.position.y = height + this.size;
+    if (this.position.x > width + this.size) this.position.x = -this.size;
+    if (this.position.y > height + this.size) this.position.y = -this.size;
+  }
+
+  separate(boids) {
+    let desiredSeparation = 25.0;
+    let steer = createVector(0, 0);
+    let count = 0;
+    for (let boid of boids) {
+      let distanceToNeighbor = p5.Vector.dist(this.position, boid.position);
+      if (distanceToNeighbor > 0 && distanceToNeighbor < desiredSeparation) {
+        let diff = p5.Vector.sub(this.position, boid.position);
+        diff.normalize();
+        diff.div(distanceToNeighbor);
+        steer.add(diff);
+        count++;
+      }
+    }
+    if (count > 0) steer.div(count);
+    if (steer.mag() > 0) {
+      steer.normalize();
+      steer.mult(this.maxSpeed);
+      steer.sub(this.velocity);
+      steer.limit(this.maxForce);
+    }
+    return steer;
+  }
+
+  align(boids) {
+    let neighborDistance = 50;
+    let sum = createVector(0, 0);
+    let count = 0;
+    for (let i = 0; i < boids.length; i++) {
+      let d = p5.Vector.dist(this.position, boids[i].position);
+      if (d > 0 && d < neighborDistance) {
+        sum.add(boids[i].velocity);
+        count++;
+      }
+    }
+    if (count > 0) {
+      sum.div(count);
+      sum.normalize();
+      sum.mult(this.maxSpeed);
+      let steer = p5.Vector.sub(sum, this.velocity);
+      steer.limit(this.maxForce);
+      return steer;
+    } else {
+      return createVector(0, 0);
+    }
+  }
+
+  cohesion(boids) {
+    let neighborDistance = 50;
+    let sum = createVector(0, 0);
+    let count = 0;
+    for (let i = 0; i < boids.length; i++) {
+      let d = p5.Vector.dist(this.position, boids[i].position);
+      if (d > 0 && d < neighborDistance) {
+        sum.add(boids[i].position);
+        count++;
+      }
+    }
+    if (count > 0) {
+      sum.div(count);
+      return this.seek(sum);
+    } else {
+      return createVector(0, 0);
+    }
+  }
+}

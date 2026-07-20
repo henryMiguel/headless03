@@ -134,10 +134,11 @@ footer {
     display: inline-block;
 }
 
+
 .btl-logo img {
   max-height: 1.5em;
   width: auto;
-}
+} 
 
 .footer-text {
     font-size: 0.9em;
@@ -161,14 +162,14 @@ footer {
   text-align: left;
   color: var(--offwhite);
   -webkit-text-stroke-width: 0.35em;
-  -webkit-text-stroke-color: red;
+  -webkit-text-stroke-color: blue;
   paint-order: stroke fill;
   line-height: 1.1em;
   hyphens: auto;
   transition: transform 0.2s ease-in-out !important;
 }
 
-.text-mdimc .p .a{
+.text-mdimc p a{
     color: var(--offwhite);
     text-decoration: none;
 }
