@@ -1,0 +1,390 @@
+﻿/* @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap'); */
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap');
+
+/* Base Reset */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --blue: #2b24ff; 
+    --green: #109648; 
+    --black: #141319; 
+    --offwhite: #f1f1f1; /* Light Gray */
+}
+
+
+/* Text Classes */
+
+@font-face {
+  font-family: "Suisse";
+  src: url("SuisseRegular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.logo-title {
+    padding-top: 1.5em;
+    font-size: 1.5em;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--offwhite);
+    margin-bottom: 8px;
+}
+
+.logo-description {
+    font-size: 1.55em;
+    font-weight: 600;
+    color: var(--offwhite);
+    margin-bottom: 20px;
+}
+
+body { 
+    background-color: var(--offwhite); 
+    font-family: 'Satoshi', sans-serif;
+    color: var(--black);
+    -moz-osx-font-smoothing: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+a { 
+    color: var(--blue); 
+    text-decoration: none; 
+}
+
+a:hover { 
+    color: var(--green); 
+}
+
+/* Header */
+
+.logo-area {
+    margin: auto; 
+}
+
+.logo-area a { 
+    color: white; 
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.logo-area a:hover { 
+    text-decoration: underline;
+}
+
+
+.site-header {
+    background-color: var(--blue);
+    color: var(--offwhite);
+    padding: 2em 1.5em 1.5em 1.5em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 75vh;
+}
+.site-header h1 {
+    font-size: 3em;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+.sub-nav {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: auto;
+    width: 100%;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.8em;
+    font-weight: 700;
+    text-transform: uppercase;
+    /* margin-top: auto; */
+    width: 100%;
+}
+
+.about-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    /* background-color: var(--offwhite); */
+    color: var(--offwhite);
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.about-btn:hover {
+    background-color: var(--offwhite);
+}
+
+/* Footer Styles */
+
+footer {
+    background-color: #ccc;
+    color: var(--black);
+    padding: 2em 0;
+}
+
+.footer-logo-link {
+    display: inline-block;
+}
+
+.btl-logo img {
+  max-height: 1.5em;
+  width: auto;
+}
+
+.footer-text {
+    font-size: 0.9em;
+    padding: 1em 0 2em 0;
+    text-align: left;
+}
+
+.footer-bottom-row {
+    display: flex;
+    gap: 0.5em;
+    justify-content: left;
+    flex-wrap: wrap;
+}
+
+.text-mdimc {
+  font-family: "Suisse";
+  display: inline-block;
+  font-size: 0.8em;
+  line-height: 1.4em;
+  font-weight: 100;
+  text-align: left;
+  color: var(--offwhite);
+  -webkit-text-stroke-width: 0.35em;
+  -webkit-text-stroke-color: red;
+  paint-order: stroke fill;
+  line-height: 1.1em;
+  hyphens: auto;
+  transition: transform 0.2s ease-in-out !important;
+}
+
+.text-mdimc .p .a{
+    color: var(--offwhite);
+    text-decoration: none;
+}
+
+.text-mdimc:hover {
+  transform: translateY(-4px);
+}
+
+.container-sm {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Layout Grid */
+.archive-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 30px 20px;
+}
+.sidebar-title {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    margin-top: 30px;
+    font-weight: 500;
+}
+.sidebar-title:first-child { margin-top: 0; }
+
+.button-group, .filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.block-filters button {
+    width: 100%;
+}
+.sidebar button {
+    background: #e0e0e0;
+    border: none;
+    padding: 8px 12px;
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    color: #000;
+}
+.sidebar button.blue-btn {
+    background: #2b24ff;
+    color: white;
+}
+
+/* homepage Table */
+.table-container {
+    padding-top: 20px;
+}
+#pattern-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+#pattern-table th {
+    text-align: left;
+    color: var(--blue);
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    padding-bottom: 15px;
+    border-bottom: 2px dotted var(--blue);
+}
+#pattern-table td {
+    padding: 15px 0;
+    border-bottom: 1px solid #ccc;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* --- ARTICLE VIEW STYLES --- */
+.article-layout {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 40px;
+    background: white;
+    border: 1px solid #ccc;
+}
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.back-btn:hover { text-decoration: underline; }
+#page-title {
+    font-size: 3rem;
+    color: var(--blue);
+    /* margin-bottom: 20px; */
+    text-transform: uppercase;
+}
+
+/* --- WIKI ARTICLE CONTENT STYLING --- */
+
+/* Base paragraph styling */
+.mw-parser-output p {
+    font-size: 1em;
+    font-weight: 450;
+    color: #1c1a13;
+}
+
+.mw-parser-output ul {
+    list-style-type: disc;
+    margin-left: 1em;
+    margin-bottom: 1rem;
+    font-size: 0.9em;
+    color: #4C4A42;
+}
+
+.mw-parser-output li {
+    margin-bottom: 0.5em;
+    font-size: 1em;
+    color: #4C4A42;
+}
+
+/* Internal Wiki Headers */
+.mw-parser-output h2, 
+.mw-parser-output h3 {
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--blue); 
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
+}
+
+.mw-parser-output h2 {
+    font-size: 1.1rem;
+    /* border-bottom: 2px solid #706C61; */
+    /* padding-bottom: 5px; */
+}
+
+/* Links inside the article */
+.mw-parser-output a {
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 500;
+}
+
+.mw-parser-output a:hover {
+    background-color: var(--blue);
+    color: white;
+    text-decoration: none;
+}
+
+/* Lists (MediaWiki loves unordered lists) */
+.mw-parser-output ul {
+    list-style-type: square;
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+/* Blockquotes for manifestos or emphasis */
+.mw-parser-output blockquote {
+    border-left: 5px solid var(--blue);
+    margin: 2rem 0;
+    padding: 1rem 2rem;
+    background-color: #f8f8f8;
+    font-size: 1.25rem;
+    font-style: italic;
+    font-weight: 500;
+}
+
+/* Ensure wiki images behave */
+.mw-parser-output img { max-width: 100%; height: auto; }
+
+/* Rhizome Node Styles */
+.node-text {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    fill: var(--blue);
+    cursor: pointer;
+    text-transform: uppercase;
+}
+.node-text:hover {
+    fill: var(--green);
+}
+.rhizome-link {
+    stroke: #e0e0e0;
+    stroke-width: 1.5px;
+}
+
+/* --- HEADER P5.JS LAYERING --- */
+.site-header {
+    position: relative; /* Forces the absolute canvas to stay inside the header */
+    overflow: hidden; /* Hides anything that bleeds off the edge */
+    /* Keep your existing .site-header properties here too! */
+}
+
+#p5-canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Pushes it to the very back */
+    pointer-events: none; /* CRITICAL: Lets your mouse click "through" the canvas to the links below */
+}
+
+.logo-area, .sub-nav {
+    position: relative;
+    z-index: 1; /* Pulls the text up to the front */
+}

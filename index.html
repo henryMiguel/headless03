@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Friction Design Archive v.3</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+    <header class="site-header">
+        <div id="p5-canvas-container"></div>
+        <div class="top-nav">
+        <a href="index.html?page=Frictiondesign:About" class="about-btn"> ABOUT THE PROJECT </a>
+        </div>
+        <div class="logo-area">
+            <h1 class="logo-title">FRICTION DESIGN ARCHIVE</h1>
+            <p class="logo-description">Design archive cataloguing friction design strategies.</p>
+        </div>
+        <div class="sub-nav">
+            <span>DESIGN UNPREDICTABLE BEHAVIOURS</span>
+            <span>V 1.0</span>
+            <span>REFLECT / RESIST / REFORM</span>
+        </div>
+    </header>
+
+    <div id="home-view" class="archive-layout">
+        <aside class="sidebar">
+            <h2 class="sidebar-title">View Mode</h2>
+            <div class="button-group">
+                <button id="btn-rhizome" class="active">Rhizome</button>
+                <button id="btn-list"class="blue-btn">List</button>
+            </div>
+
+            <h2 class="sidebar-title">Filter By Tactic (Coming Soon)</h2>
+            <div class="filter-group">
+                <button>Deceipt</button>
+                <button>Distress</button>
+                <button>Coercion</button>
+            </div>
+
+            <h2 class="sidebar-title">Filter By Intention (Coming Soon)</h2>
+            <div class="filter-group block-filters">
+                <button>Disrupt Automatic Behaviors</button>
+                <button>Manipulate The Narrative</button>
+            </div>
+        </aside>
+
+        <main class="table-container">
+            <div id="rhizome-canvas" style="display: none; width: 100%; height: 600px; border: 1px solid #ccc; background: #fff; border-radius: 4px; overflow: hidden;"></div>
+            <table id="pattern-table">
+                <thead>
+                    <tr>
+                        <th>PATTERN NAME</th>
+                        <th>TACTIC</th>
+                        <th>INTENTION</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <tr><td colspan="3">Loading archive data...</td></tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <div id="article-view" class="article-layout" style="display: none;">
+        <a href="index.html" class="back-btn">← BACK</a>
+        <h1 id="page-title">Loading...</h1>
+        <div id="content" class="mw-parser-output">
+            </div>
+    </div>
+
+     <!-- Footer Section -->
+    <footer id="contact">
+        <div class="container-sm">
+            <div class="btl-logo">
+              <a href="https://i2ads.up.pt/en/projetos/btl/" target="_blank" class="footer-logo-link">
+                <img src="images/btl-logo-v03.svg" alt="Break the Loop Logo">
+              </a>
+            </div>
+            <div class="footer-text">
+              <p>This work is funded by national funds through the FCT – Fundação para a Ciência e Tecnologia, I.P.,
+              under the project « 2023.14448.PEX» [DOI 10.54499/2023.14448.PEX]</p>
+            </div>
+
+            <div class="footer-bottom-row">
+              <a href="https://www.up.pt/fbaup/en/" target="_blank" class="footer-logo-link">
+                <img src="images/institutionalLogos/fbaup.svg" alt="FBAUP Logo" />
+              </a>
+
+              <div class="text-mdimc ">
+                <p>
+                  <a href="https://mdimc.fba.up.pt/index-EN.html" target="_blank">
+                    <span class="desktop-only">
+                      Master in Interaction <br> and Computational <br> Media Design
+                   </span>
+
+                    <span class="mobile-only">
+                      Master in Interaction <br>
+                      and Computational <br>
+                      Media Design
+                    </span>
+                  </a>
+                </p>
+              </div>
+
+              <a href="https://i2ads.up.pt/" target="_blank" class="footer-logo-link">
+                <img src="images/institutionalLogos/i2ADS_EN_h-03.svg" alt="i2 Logo" />
+              </a>
+
+              <a href="https://www.fct.pt/" target="_blank" class="footer-logo-link">
+                <img src="images/institutionalLogos/fct-01.svg" alt="FCT Logo" />
+              </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
