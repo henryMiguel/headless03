@@ -130,9 +130,9 @@ footer {
     padding: 2em 0;
 }
 
-.footer-logo-link {
+/* .footer-logo-link {
     display: inline-block;
-}
+} */
 
 
 .btl-logo img {
@@ -147,11 +147,17 @@ footer {
 }
 
 .footer-bottom-row {
-    display: flex;
-    gap: 0.5em;
-    justify-content: left;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5em;
+    align-items: center;
 }
+
+.rep-logo img {
+    max-height: 3.5em;
+    width: auto;
+}
+
 
 .text-mdimc {
   font-family: "Suisse";
@@ -285,21 +291,40 @@ footer {
     color: #1c1a13;
 }
 
-.mw-parser-output ul {
+/* .mw-parser-output ul {
     list-style-type: disc;
     margin-left: 1em;
     margin-bottom: 1rem;
     font-size: 0.9em;
-    color: #4C4A42;
-}
+    color: red;
+} */
 
 .mw-parser-output li {
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
     font-size: 1em;
-    color: #4C4A42;
+    /* color: red; */
 }
 
 /* Internal Wiki Headers */
+
+#page-title {
+    font-size: 2.5em;
+    color: var(--blue);
+    line-height: 1.1;
+}
+
+.mw-parser-output p.wiki-summary {
+   font-size: 1.2em;
+    font-weight: 500;
+    line-height: 1.4;
+    padding: 1.2rem;
+    background-color: #e8e8ff;
+    border-left: 4px solid var(--blue);
+    /* margin-bottom: 2rem;
+    margin-top: 1rem; */
+    color: var(--black);
+}
+
 .mw-parser-output h2, 
 .mw-parser-output h3 {
     font-weight: 900;
@@ -330,14 +355,13 @@ footer {
     text-decoration: none;
 }
 
-/* Lists (MediaWiki loves unordered lists) */
 .mw-parser-output ul {
     list-style-type: square;
     margin-bottom: 1.5rem;
     padding-left: 1.5rem;
 }
 
-/* Blockquotes for manifestos or emphasis */
+
 .mw-parser-output blockquote {
     border-left: 5px solid var(--blue);
     margin: 2rem 0;
@@ -370,9 +394,8 @@ footer {
 
 /* --- HEADER P5.JS LAYERING --- */
 .site-header {
-    position: relative; /* Forces the absolute canvas to stay inside the header */
-    overflow: hidden; /* Hides anything that bleeds off the edge */
-    /* Keep your existing .site-header properties here too! */
+    position: relative; 
+    overflow: hidden; 
 }
 
 #p5-canvas-container {
@@ -381,11 +404,51 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0; /* Pushes it to the very back */
-    pointer-events: none; /* CRITICAL: Lets your mouse click "through" the canvas to the links below */
+    z-index: 0; 
+    pointer-events: none; 
 }
 
 .logo-area, .sub-nav {
     position: relative;
-    z-index: 1; /* Pulls the text up to the front */
+    z-index: 1; 
 }
+
+/* --- WIKI METADATA TABLES --- */
+.mw-parser-output table {
+    width: 100%;
+    margin-bottom: 2rem;
+    border-collapse: collapse;
+    background-color: var(--offwhite); /* Slight contrast against the white article background */
+    border: 0.5px solid var(--blue); 
+}
+
+.mw-parser-output table th,
+.mw-parser-output table td {
+    text-align: left; /* Force all text to the left */
+    padding: 1em; 
+    border-bottom: 1px solid #ccc;
+    vertical-align: top;
+}
+
+/* Remove the border from the very last row */
+.mw-parser-output table tr:last-child th,
+.mw-parser-output table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Style the left column (Headers) */
+.mw-parser-output table th {
+    width: 30%; /* Locks the header column width so it looks uniform */
+    font-weight: 700;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    color: var(--blue);
+    /* border-right: 0.5px solid var(--blue); */
+}
+
+/* Style the right column (Data) */
+.mw-parser-output table td {
+    font-weight: 500;
+    color: var(--black);
+}
+

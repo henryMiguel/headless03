@@ -75,6 +75,7 @@ async function fetchArticle(title) {
     origin: "*",
     disableeditsection: true,
     disablelimitreport: true,
+    disabletoc: true,
   });
 
   try {
@@ -90,6 +91,14 @@ async function fetchArticle(title) {
     document.getElementById("page-title").innerText = data.parse.title;
     const contentDiv = document.getElementById("content");
     contentDiv.innerHTML = data.parse.text["*"];
+
+    // FIND AND STYLE THE SUMMARY ---
+    const paragraphs = contentDiv.querySelectorAll("p");
+    for (let p of paragraphs) {
+      if (p.textContent.trim().startsWith("Summary:")) {
+        p.classList.add("wiki-summary");
+      }
+    }
 
     // Fix Images
     contentDiv.querySelectorAll("img").forEach((img) => {
