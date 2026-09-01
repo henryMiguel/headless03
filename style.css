@@ -10,6 +10,7 @@
     --green: #109648; 
     --black: #141319; 
     --offwhite: #f1f1f1; /* Light Gray */
+    --drkgrey: #CCCC
 }
 
 
@@ -23,19 +24,21 @@
 }
 
 .logo-title {
-    padding-top: 1.5em;
+    padding-top: 0.75em;
     font-size: 1.5em;
     font-weight: 900;
     text-transform: uppercase;
     color: var(--offwhite);
-    margin-bottom: 8px;
+    margin-bottom: 1em;
 }
 
 .logo-description {
-    font-size: 1.55em;
+    font-size: 1.15em;
+    max-width: 700px;
+    text-align: center;
     font-weight: 600;
     color: var(--offwhite);
-    margin-bottom: 20px;
+    margin: 0 auto 20px auto;
 }
 
 body { 
@@ -52,7 +55,9 @@ a {
 }
 
 a:hover { 
-    color: var(--green); 
+    /* color: var(--green);  */
+    background-color: #2b24ff;
+    color: #f1f1f1;
 }
 
 /* Header */
@@ -76,15 +81,16 @@ a:hover {
 .site-header {
     background-color: var(--blue);
     color: var(--offwhite);
-    padding: 2em 1.5em 1.5em 1.5em;
+    padding: 1.5em 1.5em 1.5em 1.5em;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 75vh;
+    min-height: 55vh;
 }
 .site-header h1 {
-    font-size: 3em;
+    font-size: 2.5em;
+    line-height: 1.1;
     font-weight: 900;
     margin-bottom: 6px;
 }
@@ -100,7 +106,7 @@ a:hover {
 
 .top-nav {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     font-size: 0.8em;
     font-weight: 700;
     text-transform: uppercase;
@@ -110,7 +116,7 @@ a:hover {
 
 .about-btn {
     display: inline-block;
-    padding: 10px 15px;
+    /* padding: 10px 15px; */
     /* background-color: var(--offwhite); */
     color: var(--offwhite);
     text-decoration: none;
@@ -120,7 +126,9 @@ a:hover {
 
 .about-btn:hover {
     background-color: var(--offwhite);
+    color: #2b24ff;
 }
+
 
 /* Footer Styles */
 
@@ -200,16 +208,28 @@ footer {
 }
 
 /* Sidebar */
-.sidebar {
-    background-color: #1a1a1a;
+
+ .sidebar {
+    background-color: var(--drkgrey);
     color: white;
     padding: 30px 20px;
+    margin-top: 20px;
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 40px !important;
+    height: max-content !important;
+    align-self: start !important;
+    z-index: 100;
+    
 }
+
 .sidebar-title {
-    font-size: 1.1rem;
+    font-size: 0.85em;
+    text-transform: uppercase;
     margin-bottom: 15px;
     margin-top: 30px;
-    font-weight: 500;
+    font-weight: 600;
+    color: var(--black);
 }
 .sidebar-title:first-child { margin-top: 0; }
 
@@ -226,7 +246,7 @@ footer {
     border: none;
     padding: 8px 12px;
     font-family: 'Satoshi', sans-serif;
-    font-weight: 700;
+    font-weight: 500;
     cursor: pointer;
     color: #000;
 }
@@ -242,15 +262,28 @@ footer {
 #pattern-table {
     width: 100%;
     border-collapse: collapse;
+    /* height: 3000px; */
 }
 #pattern-table th {
     text-align: left;
-    color: var(--blue);
+    color: var(--black);
     text-transform: uppercase;
     font-size: 1.2rem;
     padding-bottom: 15px;
     border-bottom: 2px dotted var(--blue);
 }
+
+a.pattern-link {
+    color: var(--black); 
+    text-decoration: none; 
+    font-weight: 500; 
+}
+
+a.pattern-link:hover {
+    background-color: var(--blue);
+    color: var(--offwhite)
+}
+
 #pattern-table td {
     padding: 15px 0;
     border-bottom: 1px solid #ccc;
@@ -274,12 +307,27 @@ footer {
     font-weight: bold;
     text-transform: uppercase;
 }
-.back-btn:hover { text-decoration: underline; }
+
 #page-title {
     font-size: 3rem;
     color: var(--blue);
     /* margin-bottom: 20px; */
     text-transform: uppercase;
+}
+
+/* --- SLIM HEADER FOR ARTICLE PAGES --- */
+body.is-article .site-header {
+    min-height: auto;
+    position: sticky !important;
+    position: -webkit-sticky !important;
+    top: 0 !important;
+}
+
+/* Hide other elements of header in article view */
+body.is-article #p5-canvas-container,
+body.is-article .logo-area,
+body.is-article .sub-nav {
+    display: none !important; 
 }
 
 /* --- WIKI ARTICLE CONTENT STYLING --- */
@@ -331,7 +379,7 @@ footer {
     text-transform: uppercase;
     color: var(--blue); 
     margin-top: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.40em;
     letter-spacing: 0.5px;
 }
 
@@ -382,14 +430,43 @@ footer {
     font-weight: 700;
     fill: var(--blue);
     cursor: pointer;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .node-text:hover {
-    fill: var(--green);
+    /* fill: var(--green); */
+    background-color: var(--blue);
+    color: var(--offwhite);
 }
 .rhizome-link {
     stroke: #e0e0e0;
     stroke-width: 1.5px;
+}
+
+/* --- fit to screen button --- */
+.canvas-wrapper {
+    position: relative; 
+}
+
+.fit-btn {
+    display: none; /* Hidden by default, shown when rhizome is active */
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--drkgrey);
+    color: var(--black);
+    border: none;
+    padding: 8px 12px;
+    font-size: 0.8em;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    z-index: 100; /* Keeps it above the SVG graph */
+    transition: background-color 0.2s ease;
+}
+
+.fit-btn:hover {
+    background-color: var(--blue);
+    color: var(--offwhite);
 }
 
 /* --- HEADER P5.JS LAYERING --- */
@@ -452,3 +529,56 @@ footer {
     color: var(--black);
 }
 
+/* ==== PRINT STYLES ==== */
+@media print {
+    /* 1. HIDE UI ELEMENTS */
+    .site-header,
+    .top-nav,
+    .sidebar,
+    .fit-btn,
+    .back-btn,
+    .article-layout,
+    #home-view,
+    #contact,
+    #p5-canvas-container {
+        display: none !important;
+    }
+
+    /* Forces white background and black text, overriding dark mode */
+    body, html {
+        background-color: white !important;
+        color: black !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        font-size: 12pt !important; 
+    }
+
+    /* Removes any max-widths or margins so text fills page */
+    #article-view {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    /* Turns a tag links black and underlines  */
+    a {
+        color: black !important;
+        text-decoration: underline !important;
+    }
+
+    /* PREVENT PAGE BREAKS */
+    h1, h2, h3 {
+        break-after: avoid;
+        page-break-after: avoid; /* Fallback for older browsers */
+    }
+
+    img, table, blockquote, pre {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        max-width: 100% !important; /* Ensures images don't bleed off the page */
+    }
+}

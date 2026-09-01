@@ -8,13 +8,15 @@ const siteHeader = document.querySelector(".site-header");
 
 if (PAGE_NAME) {
   // URL has "?page=X", hide table, show article
-  if (siteHeader) siteHeader.style.display = "none";
+  if (siteHeader) 
+  document.body.classList.add("is-article");
   document.getElementById("home-view").style.display = "none";
   document.getElementById("article-view").style.display = "block";
   fetchArticle(PAGE_NAME);
 } else {
   // No page in URL, show the home page table
   if (siteHeader) siteHeader.style.display = "flex";
+  document.body.classList.remove("is-article");
   document.getElementById("home-view").style.display = "grid";
   document.getElementById("article-view").style.display = "none";
   fetchPatternList();
@@ -147,6 +149,7 @@ btnList.addEventListener("click", () => {
   btnRhizome.classList.remove("blue-btn");
 
   rhizomeCanvas.style.display = "none";
+  document.getElementById("fit-button").style.display = "none";
   patternTable.style.display = "table";
 });
 
@@ -158,12 +161,12 @@ btnRhizome.addEventListener("click", () => {
 
   patternTable.style.display = "none";
   rhizomeCanvas.style.display = "block";
+  document.getElementById("fit-button").style.display = "block";
 });
 
 // --- D3 RHIZOME GRAPH LOGIC ---
 function renderRhizome(pages) {
-  // 1. Setup the data (Because you don't have Tactics/Intentions yet,
-  // we will fake the "Rhizome" by linking random patterns together for now)
+  // 1. Setup the data Fake for now
   const nodes = pages
     .filter((p) => p.title !== "Main_Page")
     .map((p) => ({ id: p.title }));
@@ -191,7 +194,7 @@ function renderRhizome(pages) {
     .attr("height", height)
     .style("cursor", "grab"); // Gives the user a hint they can drag the background
 
-  // --- THE NEW ZOOM MAGIC ---
+  // --- ZOOM ---
   // 3a. Create a "Master Group" that holds everything
   const mainGroup = svg.append("g");
 
@@ -222,7 +225,7 @@ function renderRhizome(pages) {
     .force("center", d3.forceCenter(width / 2, height / 2))
     .force("collide", d3.forceCollide().radius(40));
 
-  // 5. Draw the lines (Links) - NOTICE WE APPEND TO mainGroup NOW!
+  // 5. Draw the lines (Links)
   const link = mainGroup
     .append("g")
     .selectAll("line")
@@ -230,18 +233,30 @@ function renderRhizome(pages) {
     .join("line")
     .attr("class", "rhizome-link");
 
-  // 6. Draw the text (Nodes) - NOTICE WE APPEND TO mainGroup NOW!
+  // 6. Draw the text (Nodes)
   const node = mainGroup
-    .append("g")
-    .selectAll("text")
+    .append("g") // Group to hold all nodes
+    .selectAll("foreignObject")
     .data(nodes)
-    .join("text")
+    .join("foreignObject")
+    .attr("width", 200) // node width
+    .attr("height", 60) // node height
+    .call(drag(simulation));
+
+  // 6a. Put standard HTML in foreignObject
+  node
+    .append("xhtml:div")
+    .style("display", "flex")
+    .style("justify-content", "center")
+    .style("align-items", "center")
+    .style("width", "100%")
+    .style("height", "100%")
+    .append("xhtml:span") // This is what we style in CSS!
     .attr("class", "node-text")
     .text((d) => d.id)
     .on("click", (event, d) => {
       window.location.href = `index.html?page=${encodeURIComponent(d.id)}`;
-    })
-    .call(drag(simulation));
+    });
 
   // 7. Make it move on every "tick" of the physics engine
   simulation.on("tick", () => {
@@ -251,9 +266,51 @@ function renderRhizome(pages) {
       .attr("x2", (d) => d.target.x)
       .attr("y2", (d) => d.target.y);
     node
-      .attr("x", (d) => d.x - 20) // Center text slightly
-      .attr("y", (d) => d.y);
+      .attr("x", (d) => d.x - 100) // Center text slightly
+      .attr("y", (d) => d.y - 30); // Center text slightly
   });
+
+  // --- FIT TO SCREEN BUTTON LOGIC ---
+  const fitBtn = document.getElementById("fit-button");
+  if (fitBtn) {
+    // Remove old event listeners 
+    const newBtn = fitBtn.cloneNode(true);
+    fitBtn.parentNode.replaceChild(newBtn, fitBtn);
+
+    newBtn.addEventListener("click", () => {
+      // 1. Find the outer edges of graph
+      const padding = 40; 
+      const minX = d3.min(nodes, (d) => d.x) - 100 - padding; 
+      const maxX = d3.max(nodes, (d) => d.x) + 100 + padding;
+      const minY = d3.min(nodes, (d) => d.y) - 30 - padding; 
+      const maxY = d3.max(nodes, (d) => d.y) + 30 + padding;
+
+      const graphWidth = maxX - minX;
+      const graphHeight = maxY - minY;
+
+      // 2. Calculate zoom scale
+      const scale = Math.min(width / graphWidth, height / graphHeight);
+
+      // Clamp it so it doesn't zoom out further than your limit (0.25) or in too close (4)
+      const clampedScale = Math.max(0.25, Math.min(scale, 4));
+
+      // 3. Find the center point
+      const midX = (minX + maxX) / 2;
+      const midY = (minY + maxY) / 2;
+
+      const translateX = width / 2 - midX * clampedScale;
+      const translateY = height / 2 - midY * clampedScale;
+
+      // 4. animate the camera to the new coordinates
+      svg
+        .transition()
+        .duration(750) // 750ms animation
+        .call(
+          zoom.transform,
+          d3.zoomIdentity.translate(translateX, translateY).scale(clampedScale),
+        );
+    });
+  }
 
   // Physics Dragging functionality
   function drag(simulation) {
@@ -279,118 +336,6 @@ function renderRhizome(pages) {
   }
 }
 
-// --- INTERACTIVE HEADER LOGIC (Slow-Motion Gravity) ---
-function initGravityHeader() {
-  const headerTitleLink = document.querySelector(".site-header .logo-area h1");
-  if (!headerTitleLink) return;
-
-  const text = headerTitleLink.innerText;
-  headerTitleLink.innerHTML = "";
-
-  let letters = [];
-
-  // 1. Wrap each letter and prep its physics properties
-  text.split("").forEach((char) => {
-    if (char === " ") {
-      headerTitleLink.appendChild(document.createTextNode(" "));
-    } else {
-      const span = document.createElement("span");
-      span.innerText = char;
-      span.style.display = "inline-block";
-      headerTitleLink.appendChild(span);
-
-      letters.push({
-        element: span,
-        x: 0,
-        y: 0,
-        vx: 0,
-        vy: 0,
-        rotation: 0,
-        vr: 0,
-        isFalling: false,
-      });
-    }
-  });
-
-  const headerArea = document.querySelector(".site-header");
-  let gravityActive = false;
-
-  // 2. Trigger the slow collapse on mouse enter
-  headerArea.addEventListener("mouseenter", () => {
-    if (gravityActive) return;
-    gravityActive = true;
-
-    letters.forEach((l) => {
-      l.isFalling = true;
-      l.element.style.transition = "none";
-
-      // VERY gentle initial drift (almost zero-G)
-      l.vx = (Math.random() - 0.5) * 1.5; // Slight horizontal drift
-      l.vy = Math.random() * -1; // Tiny upward bump before sinking
-      l.vr = (Math.random() - 0.5) * 1; // Very slow rotation
-    });
-
-    requestAnimationFrame(physicsLoop);
-  });
-
-  // 3. The Physics Engine
-  function physicsLoop() {
-    let stillMoving = false;
-
-    const floor = headerArea.clientHeight - headerTitleLink.offsetTop - 50;
-
-    letters.forEach((l) => {
-      if (!l.isFalling) return;
-
-      // --- THE MAGIC NUMBER: SLOW GRAVITY ---
-      l.vy += 0.001; // Was 1.2. This makes it fall incredibly slowly.
-
-      // Add a tiny bit of air resistance so they don't slide infinitely
-      l.vx *= 0.99;
-      l.vr *= 0.99;
-
-      l.x += l.vx;
-      l.y += l.vy;
-      l.rotation += l.vr;
-
-      // Soft landing on the floor (no bouncy rubber effect)
-      if (l.y > floor) {
-        l.y = floor;
-        l.vy *= -0.1; // Barely bounces
-        l.vx *= 0.8; // Sticks to the floor
-        l.vr *= 0.8;
-      }
-
-      // Lowered the movement threshold so the animation doesn't cut off early
-      if (Math.abs(l.vy) > 0.05 || Math.abs(l.vx) > 0.05 || l.y < floor) {
-        stillMoving = true;
-      }
-
-      l.element.style.transform = `translate(${l.x}px, ${l.y}px) rotate(${l.rotation}deg)`;
-    });
-
-    if (stillMoving) {
-      requestAnimationFrame(physicsLoop);
-    }
-  }
-
-  // 4. Smoothly reconstruct the title when the mouse leaves
-  headerArea.addEventListener("mouseleave", () => {
-    gravityActive = false;
-    letters.forEach((l) => {
-      l.isFalling = false;
-      l.x = 0;
-      l.y = 0;
-      l.rotation = 0;
-      // A long, 1.5-second smooth transition back to place
-      l.element.style.transition =
-        "transform 1.5s cubic-bezier(0.25, 1, 0.5, 1)";
-      l.element.style.transform = `translate(0px, 0px) rotate(0deg)`;
-    });
-  });
-}
-
-initGravityHeader();
 
 // --- P5.js Canvas Setup for Interactive Header ---
 
@@ -405,21 +350,21 @@ function setup() {
   flock = new Flock();
 
   // Add an initial set of boids into the system
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 50; i++) {
     let b = new Boid(width / 2, height / 2);
     flock.addBoid(b);
   }
+
 }
 
 function draw() {
-  // clear() makes the canvas transparent so your CSS background shows through
   clear();
 
   flock.run();
 }
 
 // 3. Move p5 events outside of draw()
-function mouseDragged() {
+function mouseMoved() {
   flock.addBoid(new Boid(mouseX, mouseY));
 }
 
@@ -431,7 +376,7 @@ function windowResized() {
   }
 }
 
-// 4. Move Classes outside of draw()
+
 class Flock {
   constructor() {
     this.boids = [];
@@ -445,6 +390,10 @@ class Flock {
 
   addBoid(b) {
     this.boids.push(b);
+    const MAX_BOIDS = 150; //max number of boids
+    if (this.boids.length > MAX_BOIDS) {
+      this.boids.shift(); // Kills the oldest boid if there are too many
+    }
   }
 }
 

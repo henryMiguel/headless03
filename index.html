@@ -12,11 +12,12 @@
       <header class="site-header">
           <div id="p5-canvas-container"></div>
           <div class="top-nav">
-          <a href="index.html?page=Frictiondesign:About" class="about-btn"> ABOUT THE PROJECT </a>
+            <a href="index.html" class="about-btn"> FRICTION DESIGN ARCHIVE </a> 
+            <a href="index.html?page=Frictiondesign:About" class="about-btn"> ABOUT THE PROJECT </a>
           </div>
           <div class="logo-area">
-              <h1 class="logo-title">FRICTION DESIGN ARCHIVE</h1>
-              <p class="logo-description">Design archive cataloguing friction design strategies.</p>
+              <h1 class="logo-title">Cataloguing Friction <br> Design Strategies</h1>
+              <p class="logo-description">A growing archive dedicated to the deliberate use of resistance in user interfaces. By cataloguing patterns that disrupt automatic habits, this project explores how intentional friction can be used to resist seamless design, provoke reflection, and reform our relationship with digital systems.</p>
           </div>
           <div class="sub-nav">
               <span>DESIGN UNPREDICTABLE BEHAVIOURS</span>
@@ -29,8 +30,8 @@
           <aside class="sidebar">
               <h2 class="sidebar-title">View Mode</h2>
               <div class="button-group">
-                  <button id="btn-rhizome" class="active">Rhizome</button>
                   <button id="btn-list"class="blue-btn">List</button>
+                  <button id="btn-rhizome" class="active">Rhizome</button>
               </div>
 
               <h2 class="sidebar-title">Filter By Tactic (Coming Soon)</h2>
@@ -49,6 +50,10 @@
 
           <main class="table-container">
               <div id="rhizome-canvas" style="display: none; width: 100%; height: 600px; border: 1px solid #ccc; background: #fff; border-radius: 4px; overflow: hidden;"></div>
+              <div class="canvas-wrapper">
+                 <button id="fit-button" class="fit-btn">Fit</button>
+                 <div id="rhizome-canvas"></div>
+              </div>
               <table id="pattern-table">
                   <thead>
                       <tr>
