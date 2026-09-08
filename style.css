@@ -10,7 +10,8 @@
     --green: #109648; 
     --black: #141319; 
     --offwhite: #f1f1f1; /* Light Gray */
-    --drkgrey: #CCCC
+    --drkgrey: #CCCC;
+    --content-width: 700px;
 }
 
 
@@ -34,7 +35,7 @@
 
 .logo-description {
     font-size: 1.15em;
-    max-width: 700px;
+    max-width: var(--content-width);
     text-align: center;
     font-weight: 600;
     color: var(--offwhite);
@@ -193,7 +194,7 @@ footer {
 }
 
 .container-sm {
-  max-width: 700px;
+  max-width: var(--content-width);
   margin: 0 auto;
 }
 
@@ -291,14 +292,8 @@ a.pattern-link:hover {
     font-weight: 500;
 }
 
-/* --- ARTICLE VIEW STYLES --- */
-.article-layout {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 40px;
-    background: white;
-    border: 1px solid #ccc;
-}
+/* --- ARTICLE STYLES --- */
+
 .back-btn {
     display: inline-block;
     margin-bottom: 20px;
@@ -308,14 +303,13 @@ a.pattern-link:hover {
     text-transform: uppercase;
 }
 
-#page-title {
+/* #page-title {
     font-size: 3rem;
     color: var(--blue);
-    /* margin-bottom: 20px; */
     text-transform: uppercase;
-}
+} */
 
-/* --- SLIM HEADER FOR ARTICLE PAGES --- */
+/* HEADER FOR ARTICLE PAGES  */
 body.is-article .site-header {
     min-height: auto;
     position: sticky !important;
@@ -330,7 +324,108 @@ body.is-article .sub-nav {
     display: none !important; 
 }
 
-/* --- WIKI ARTICLE CONTENT STYLING --- */
+/* --- ARTICLE SIDEBAR & TOC --- */
+#article-sidebar {
+    grid-column: 1;
+    justify-self: end;
+    width: 200px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 215px; 
+    height: max-content;
+}
+
+.toc {
+    background-color: var(--drkgrey);
+    color: var(--black);
+    text-transform: uppercase;
+    padding: 20px;
+    /* border: 1px solid var(--blue); */
+    font-size: 0.8em;
+}
+
+.toc .tocnumber {
+    font-weight: 700;
+}
+
+.toc .toctext {
+    font-weight: 400;
+}
+
+/* --- ARTICLE LAYOUT & MAIN COLUMN --- */
+
+.article-layout {
+    display: grid;
+    /* Symmetric 3-column grid: Column 2 matches footer width (--content-width) and stays centered */
+    grid-template-columns: 1fr var(--content-width) 1fr;
+    column-gap: 40px;
+    padding: 40px 20px;
+    align-items: start;
+}
+
+.article-main {
+    grid-column: 2;
+    min-width: 0; /* Prevent grid blowout */
+}
+
+/* Responsive adjustments for article view */
+@media (max-width: 1200px) {
+    .article-layout {
+        grid-template-columns: 200px minmax(0, var(--content-width));
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    #article-sidebar {
+        grid-column: 1;
+        justify-self: start;
+    }
+
+    .article-main {
+        grid-column: 2;
+    }
+}
+
+@media (max-width: 850px) {
+    .article-layout {
+        display: block;
+        padding: 20px;
+    }
+
+    #article-sidebar {
+        position: static;
+        width: 100%;
+        max-width: var(--content-width);
+        margin: 0 auto 30px auto;
+    }
+
+    .article-main {
+        max-width: var(--content-width);
+        margin: 0 auto;
+    }
+}
+
+#article-content {
+    /* background: white; */
+    /* border: 1px solid #ccc; */
+    /* padding: 40px; */
+}
+
+.toc ul {
+    list-style: none; 
+    /* padding-left: 15px; */
+}
+
+.toc a {
+    color: var(--black);
+    text-decoration: none;
+}
+
+.toc a:hover {
+    background-color: var(--blue);
+    color: var(--offwhite);
+
+}
 
 /* Base paragraph styling */
 .mw-parser-output p {
@@ -338,14 +433,6 @@ body.is-article .sub-nav {
     font-weight: 450;
     color: #1c1a13;
 }
-
-/* .mw-parser-output ul {
-    list-style-type: disc;
-    margin-left: 1em;
-    margin-bottom: 1rem;
-    font-size: 0.9em;
-    color: red;
-} */
 
 .mw-parser-output li {
     margin-bottom: 1em;
@@ -357,8 +444,10 @@ body.is-article .sub-nav {
 
 #page-title {
     font-size: 2.5em;
+    font-weight: 725;
     color: var(--blue);
     line-height: 1.1;
+    text-transform: uppercase;
 }
 
 .mw-parser-output p.wiki-summary {
@@ -368,8 +457,6 @@ body.is-article .sub-nav {
     padding: 1.2rem;
     background-color: #e8e8ff;
     border-left: 4px solid var(--blue);
-    /* margin-bottom: 2rem;
-    margin-top: 1rem; */
     color: var(--black);
 }
 
@@ -495,7 +582,7 @@ body.is-article .sub-nav {
     width: 100%;
     margin-bottom: 2rem;
     border-collapse: collapse;
-    background-color: var(--offwhite); /* Slight contrast against the white article background */
+    background-color: var(--offwhite); 
     border: 0.5px solid var(--blue); 
 }
 
@@ -525,7 +612,8 @@ body.is-article .sub-nav {
 
 /* Style the right column (Data) */
 .mw-parser-output table td {
-    font-weight: 500;
+    font-weight: 300;
+    font-size: 0.85em;
     color: var(--black);
 }
 
@@ -537,7 +625,7 @@ body.is-article .sub-nav {
     .sidebar,
     .fit-btn,
     .back-btn,
-    .article-layout,
+    #article-sidebar,
     #home-view,
     #contact,
     #p5-canvas-container {
@@ -582,3 +670,5 @@ body.is-article .sub-nav {
         max-width: 100% !important; /* Ensures images don't bleed off the page */
     }
 }
+
+

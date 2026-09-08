@@ -76,8 +76,8 @@ async function fetchArticle(title) {
     format: "json",
     origin: "*",
     disableeditsection: true,
-    disablelimitreport: true,
-    disabletoc: true,
+    disablelimitreport: true
+    // disabletoc: true,
   });
 
   try {
@@ -91,7 +91,9 @@ async function fetchArticle(title) {
     }
 
     document.getElementById("page-title").innerText = data.parse.title;
-    const contentDiv = document.getElementById("content");
+
+    // 1. THE FIX: Update the variable to target the new ID
+    const contentDiv = document.getElementById("article-content");
     contentDiv.innerHTML = data.parse.text["*"];
 
     // FIND AND STYLE THE SUMMARY ---
@@ -101,6 +103,19 @@ async function fetchArticle(title) {
         p.classList.add("wiki-summary");
       }
     }
+
+    // 2. EXTRACT THE TABLE OF CONTENTS
+    const tocElement = contentDiv.querySelector(".toc"); // Grabs TOC from the new text box
+    const articleSidebar = document.getElementById("article-sidebar");
+
+    // Clear any old TOC from a previous article
+    articleSidebar.innerHTML = "";
+
+    if (tocElement) {
+      // Move it into the sidebar!
+      articleSidebar.appendChild(tocElement);
+    }
+  
 
     // Fix Images
     contentDiv.querySelectorAll("img").forEach((img) => {
