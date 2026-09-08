@@ -69,11 +69,18 @@
           </main>
       </div>
 
-      <div id="article-view" class="article-layout" style="display: none;">
-          <a href="index.html" class="back-btn">← BACK</a>
-          <h1 id="page-title">Loading...</h1>
-          <div id="content" class="mw-parser-output">
-              </div>
+      <div id="article-view" style="display: none;">
+        <div class="article-layout">
+            <!-- Left Column: Where the TOC will go -->
+            <aside id="article-sidebar"></aside>
+
+            <!-- Right Column: title + content in the white box -->
+            <div class="article-main">
+                <a href="index.html" class="back-btn">← BACK</a>
+                <h1 id="page-title">Loading...</h1>
+                <main id="article-content" class="mw-parser-output"></main>
+            </div>
+        </div>
       </div>
 
       <!-- Footer Section -->
